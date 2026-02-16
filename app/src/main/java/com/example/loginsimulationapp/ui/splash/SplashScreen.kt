@@ -22,7 +22,7 @@ import kotlinx.coroutines.delay
 fun SplashScreen(
     onFinished: () -> Unit
 ) {
-    // ✅ Start animation immediately (no unused assignment)
+    // Start animation immediately (no unused assignment)
     val scale by animateFloatAsState(
         targetValue = 1f,
         animationSpec = tween(durationMillis = 700),

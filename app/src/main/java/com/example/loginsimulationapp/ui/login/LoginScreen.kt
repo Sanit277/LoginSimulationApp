@@ -2,7 +2,9 @@ package com.example.loginsimulationapp.ui.login
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -11,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -39,11 +42,12 @@ fun LoginScreen(
         Image(
             painter = painterResource(R.drawable.hamrostorelogo),
             contentDescription = "App Logo",
-            modifier = Modifier.size(200.dp)
+            modifier = Modifier.width(200.dp).height(100.dp),
+            contentScale = ContentScale.Fit
         )
 
         Text(
-            text = "Login",
+            text = "Welcome back!",
             fontSize = 28.sp,
             fontWeight = FontWeight.Bold
         )
@@ -56,6 +60,7 @@ fun LoginScreen(
                 Text(text = "Email")
             },
             singleLine = true,
+            shape = RoundedCornerShape(30.dp),
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -69,6 +74,7 @@ fun LoginScreen(
             },
             singleLine = true,
             visualTransformation = PasswordVisualTransformation(),
+            shape = RoundedCornerShape(30.dp),
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -82,21 +88,37 @@ fun LoginScreen(
             Spacer(modifier = Modifier.height(12.dp)
             )
         }
+
         Button(
             onClick = onLoginClicked,
             enabled = !isLoading,
-            modifier = Modifier.fillMaxWidth()
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color.Black,
+                contentColor = Color.White,
+                disabledContainerColor = Color.Black.copy(alpha = 0.5f),
+                disabledContentColor = Color.White.copy(alpha = 0.7f)
+            ),
+            modifier = Modifier
+                .width(300.dp)
                 .height(48.dp)
         ) {
-            if (isLoading){
+            if (isLoading) {
                 CircularProgressIndicator(
                     modifier = Modifier.size(20.dp),
-                    strokeWidth = 2.dp
+                    strokeWidth = 2.dp,
+                    color = Color.White // makes loader visible on black
                 )
-            }else{
+            } else {
                 Text(text = "Login")
             }
         }
+
+        Spacer(modifier = Modifier.height(12.dp))
+        Text(
+            text = "Forgot Password ?",
+            color = Color.Gray,
+        )
+
         Spacer(modifier = Modifier.height(12.dp))
         Text(
             text = "Don't have an account? Sign up",

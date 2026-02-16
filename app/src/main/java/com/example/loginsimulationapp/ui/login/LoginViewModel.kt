@@ -30,7 +30,7 @@ class LoginViewModel : ViewModel() {
             )
         }
         // Simulated login logic
-        if (_state.value.email == "test@example.com" &&
+        if (_state.value.email == "sanit@gmail.com" &&
             _state.value.password == "123456"
         ) {
             _state.update {
