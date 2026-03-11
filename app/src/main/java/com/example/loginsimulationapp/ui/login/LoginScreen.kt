@@ -1,6 +1,7 @@
 package com.example.loginsimulationapp.ui.login
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -18,31 +19,34 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.loginsimulationapp.R
 
 @Composable
 fun LoginScreen(
-    email: String,
+    identifier: String,
     password: String,
     isLoading: Boolean,
     errorMessage: String?,
-    onEmailChange: (String) -> Unit,
+    onIdentifierChange: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
-    onLoginClicked: () -> Unit
-){
+    onLoginClicked: () -> Unit,
+    onSignUpClicked: () -> Unit
+) {
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
             .padding(24.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
-    ){
+    ) {
         Image(
             painter = painterResource(R.drawable.hamrostorelogo),
             contentDescription = "App Logo",
-            modifier = Modifier.width(200.dp).height(100.dp),
+            modifier = Modifier
+                .width(200.dp)
+                .height(100.dp),
             contentScale = ContentScale.Fit
         )
 
@@ -51,13 +55,14 @@ fun LoginScreen(
             fontSize = 28.sp,
             fontWeight = FontWeight.Bold
         )
+
         Spacer(modifier = Modifier.height(24.dp))
 
         OutlinedTextField(
-            value = email,
-            onValueChange = onEmailChange,
+            value = identifier,
+            onValueChange = onIdentifierChange,
             label = {
-                Text(text = "Email")
+                Text(text = "Email or Phone")
             },
             singleLine = true,
             shape = RoundedCornerShape(30.dp),
@@ -80,13 +85,12 @@ fun LoginScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        if(errorMessage != null) {
+        if (errorMessage != null) {
             Text(
                 text = errorMessage,
                 color = MaterialTheme.colorScheme.error
             )
-            Spacer(modifier = Modifier.height(12.dp)
-            )
+            Spacer(modifier = Modifier.height(12.dp))
         }
 
         Button(
@@ -106,7 +110,7 @@ fun LoginScreen(
                 CircularProgressIndicator(
                     modifier = Modifier.size(20.dp),
                     strokeWidth = 2.dp,
-                    color = Color.White // makes loader visible on black
+                    color = Color.White
                 )
             } else {
                 Text(text = "Login")
@@ -114,29 +118,33 @@ fun LoginScreen(
         }
 
         Spacer(modifier = Modifier.height(12.dp))
+
         Text(
             text = "Forgot Password ?",
-            color = Color.Gray,
+            color = Color(0xFF10524A),
         )
 
         Spacer(modifier = Modifier.height(12.dp))
+
         Text(
             text = "Don't have an account? Sign up",
-            color = Color.Gray,
+            color = Color(0xFF10524A),
+            modifier = Modifier.clickable { onSignUpClicked() }
         )
     }
 }
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun LoginScreenPreview(){
+fun LoginScreenPreview() {
     LoginScreen(
-        email = "",
+        identifier = "",
         password = "",
         isLoading = false,
         errorMessage = null,
-        onEmailChange = {},
+        onIdentifierChange = {},
         onPasswordChange = {},
-        onLoginClicked = {}
+        onLoginClicked = {},
+        onSignUpClicked = {}
     )
 }

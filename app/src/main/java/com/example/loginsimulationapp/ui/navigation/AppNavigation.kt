@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.loginsimulationapp.ui.dashboard.DashboardRoute
 import com.example.loginsimulationapp.ui.login.LoginRoute
+import com.example.loginsimulationapp.ui.register.RegisterRoute
 import com.example.loginsimulationapp.ui.splash.SplashScreen
 
 @Composable
@@ -16,7 +17,7 @@ fun AppNavigation(
 ) {
     NavHost(
         navController = navController,
-        startDestination = AppRoute.Splash.route,   // ✅ splash first
+        startDestination = AppRoute.Splash.route,   //  splash first
         modifier = modifier
     ) {
         composable(AppRoute.Splash.route) {
@@ -35,6 +36,20 @@ fun AppNavigation(
                     navController.navigate(AppRoute.Dashboard.route) {
                         popUpTo(AppRoute.Login.route) { inclusive = true }
                     }
+                },
+                onSignUpClick = {
+                    navController.navigate(AppRoute.Register.route)
+                }
+            )
+        }
+
+        composable(AppRoute.Register.route){
+            RegisterRoute(
+                onRegisterSuccess = {
+                    navController.popBackStack()
+                },
+                onBackToLogin = {
+                    navController.popBackStack()
                 }
             )
         }

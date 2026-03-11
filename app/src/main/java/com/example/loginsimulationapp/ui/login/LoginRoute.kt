@@ -7,11 +7,12 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
 fun LoginRoute(
-    onLoginSuccess: () -> Unit
+    onLoginSuccess: () -> Unit,
+    onSignUpClick: () -> Unit
 ) {
     val viewModel: LoginViewModel = viewModel()
     val state = viewModel.state.collectAsStateWithLifecycle().value
-    // 🔹 Navigation side-effect
+
     LaunchedEffect(state.isLoggedIn) {
         if (state.isLoggedIn) {
             onLoginSuccess()
@@ -19,12 +20,13 @@ fun LoginRoute(
     }
 
     LoginScreen(
-        email = state.email,
+        identifier = state.identifier,
         password = state.password,
         isLoading = state.isLoading,
         errorMessage = state.errorMessage,
-        onEmailChange = viewModel::onEmailChange,
+        onIdentifierChange = viewModel::onIdentifierChange,
         onPasswordChange = viewModel::onPasswordChange,
-        onLoginClicked = viewModel::onLoginClicked
+        onLoginClicked = viewModel::onLoginClicked,
+        onSignUpClicked = onSignUpClick
     )
 }

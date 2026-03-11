@@ -9,6 +9,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.loginsimulationapp.ui.dashboard.DashboardRoute
 import com.example.loginsimulationapp.ui.login.LoginRoute
+import com.example.loginsimulationapp.ui.signup.SignUpRoute
 
 @Composable
 fun AppNavGraph(
@@ -28,6 +29,21 @@ fun AppNavGraph(
                     navController.navigate(AppRoute.Dashboard.route) {
                         popUpTo(AppRoute.Login.route) { inclusive = true }
                     }
+                },
+                onSignUpClick = {
+                    navController.navigate(AppRoute.Register.route)
+                }
+            )
+        }
+        composable(AppRoute.Register.route) {
+            SignUpRoute(
+                onSignUpSuccess = {
+                    navController.navigate(AppRoute.Dashboard.route) {
+                        popUpTo(AppRoute.Login.route) { inclusive = true }
+                    }
+                },
+                onLoginClick = {
+                    navController.navigate(AppRoute.Login.route)
                 }
             )
         }

@@ -1,193 +1,322 @@
 package com.example.loginsimulationapp.ui.home
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
-import androidx.compose.foundation.Image
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.loginsimulationapp.data.remote.dto.ProductDto
+import com.example.loginsimulationapp.ui.product.ProductViewModel
 
 @Composable
 fun HomeScreen(
-    onAddToCart: (Product) -> Unit,
-    viewModel: HomeViewModel = viewModel()
+    onAddToCart: (ProductDto) -> Unit = {},
+    homeViewModel: HomeViewModel = viewModel(),
+    productViewModel: ProductViewModel = viewModel()
 ) {
-    val uiState by viewModel.uiState.collectAsState()
-    HomeScreenContent(uiState = uiState, onAddToCart = onAddToCart)
+    val homeUiState by homeViewModel.uiState.collectAsState()
+    val products by productViewModel.products.collectAsState()
+    val isLoading by productViewModel.isLoading.collectAsState()
+    val error by productViewModel.error.collectAsState()
+
+    LaunchedEffect(Unit) {
+        productViewModel.fetchProducts()
+    }
+
+    HomeScreenContent(
+        categories = homeUiState.categories,
+        products = products,
+        isLoading = isLoading,
+        error = error,
+        onAddToCart = onAddToCart
+    )
 }
 
-/*
-   UI CONTENT (NO Scaffold / NO BottomNav / NO TopBar)
-   DashboardScreen provides them.
-*/
 @Composable
 fun HomeScreenContent(
-    uiState: HomeUiState,
-    onAddToCart: (Product) -> Unit
+    categories: List<Category>,
+    products: List<ProductDto>,
+    isLoading: Boolean,
+    error: String?,
+    onAddToCart: (ProductDto) -> Unit
 ) {
     var query by remember { mutableStateOf("") }
 
-    val filteredProducts = remember(uiState.products, query) {
-        uiState.products.filter { p ->
-            query.isBlank() || p.title.contains(query, ignoreCase = true)
+    val filteredProducts = remember(products, query) {
+        products.filter { product ->
+            query.isBlank() || product.productName.contains(query, ignoreCase = true)
         }
     }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .background(Color.White)
+            .padding(horizontal = 16.dp, vertical = 12.dp)
     ) {
-        // 🔍 Search (WOW + useful)
+        Text(
+            text = "Simple shopping experience",
+            style = MaterialTheme.typography.bodyLarge,
+            color = Color.DarkGray
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
         OutlinedTextField(
             value = query,
             onValueChange = { query = it },
             singleLine = true,
             modifier = Modifier.fillMaxWidth(),
-            label = { Text("Search products") }
+            label = { Text("Search products", color = Color.Black) },
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = Color.Black,
+                unfocusedBorderColor = Color.Gray,
+                focusedLabelColor = Color.Black,
+                unfocusedLabelColor = Color.Gray,
+                cursorColor = Color.Black,
+                focusedTextColor = Color.Black,
+                unfocusedTextColor = Color.Black
+            ),
+            shape = RoundedCornerShape(14.dp)
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(20.dp))
 
         Text(
             text = "Categories",
+            style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.Bold,
-            style = MaterialTheme.typography.titleMedium
+            color = Color.Black
         )
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        LazyRow {
-            items(uiState.categories) { category ->
+        LazyRow(
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            items(categories) { category ->
                 CategoryItem(category)
             }
         }
 
-        Spacer(modifier = Modifier.height(18.dp))
+        Spacer(modifier = Modifier.height(20.dp))
 
         Text(
             text = "Products",
+            style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.Bold,
-            style = MaterialTheme.typography.titleMedium
+            color = Color.Black
         )
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        // ✨ Animated empty state
-        AnimatedVisibility(
-            visible = filteredProducts.isEmpty(),
-            enter = fadeIn() + slideInVertically(initialOffsetY = { it / 3 }),
-            exit = fadeOut() + slideOutVertically(targetOffsetY = { it / 3 })
-        ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 28.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Text("No products found 😕", style = MaterialTheme.typography.titleMedium)
+        when {
+            isLoading -> {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 40.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator()
+                }
             }
-        }
 
-        if (filteredProducts.isNotEmpty()) {
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(2),
-                contentPadding = PaddingValues(8.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-                modifier = Modifier.fillMaxSize()
-            ) {
-                items(filteredProducts) { product ->
-                    ProductCard(product = product, onAddToCart = { onAddToCart(product) })
+            error != null -> {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 40.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = error,
+                        color = Color.Black
+                    )
+                }
+            }
+
+            filteredProducts.isEmpty() -> {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 40.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "No products found",
+                        color = Color.Gray
+                    )
+                }
+            }
+
+            else -> {
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(2),
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(bottom = 16.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    items(filteredProducts) { product ->
+
+                        BackendProductCard(
+                            product = product,
+                            onProductClick = { },
+                            onAddToCart = { }
+                        )
+
+                    }
                 }
             }
         }
     }
 }
 
-/*
-   COMPONENTS
- */
-
 @Composable
 fun CategoryItem(category: Category) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
+    Card(
         modifier = Modifier
-            .padding(end = 16.dp)
-            .clickable { /* later: filter */ }
+            .width(110.dp)
+            .clickable { },
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+        border = BorderStroke(1.dp, Color.Gray)
     ) {
-        Image(
-            painter = painterResource(id = category.iconRes),
-            contentDescription = null,
-            modifier = Modifier.size(48.dp)
-        )
-        Text(text = category.title)
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 16.dp, horizontal = 12.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            androidx.compose.foundation.Image(
+                painter = androidx.compose.ui.res.painterResource(id = category.iconRes),
+                contentDescription = category.title,
+                modifier = Modifier.size(36.dp)
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Text(
+                text = category.title,
+                color = Color.Black,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+        }
     }
 }
 
 @Composable
-fun ProductCard(
-    product: Product,
+fun BackendProductCard(
+    product: ProductDto,
+    onProductClick: (ProductDto) -> Unit,
     onAddToCart: () -> Unit
 ) {
     Card(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+        border = BorderStroke(1.dp, Color.LightGray),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Column(
-            modifier = Modifier.padding(10.dp),
+            modifier = Modifier.padding(12.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Image(
-                painter = painterResource(id = product.imageRes),
-                contentDescription = null,
-                modifier = Modifier.size(80.dp)
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(90.dp)
+                    .background(Color(0xFFF2F2F2), RoundedCornerShape(10.dp)),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "No Image",
+                    color = Color.Gray,
+                    style = MaterialTheme.typography.bodySmall
+                )
+            }
+
+            Spacer(modifier = Modifier.height(10.dp))
+
+            Text(
+                text = product.productName,
+                color = Color.Black,
+                fontWeight = FontWeight.SemiBold,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
-            Spacer(modifier = Modifier.height(6.dp))
-            Text(product.title, fontWeight = FontWeight.SemiBold, softWrap = true, maxLines = 1, overflow = TextOverflow.Ellipsis)
-            Text(product.price)
+
+            Spacer(modifier = Modifier.height(4.dp))
+
+            Text(
+                text = "Rs ${product.price}",
+                color = Color.DarkGray,
+                maxLines = 1
+            )
+
+            Spacer(modifier = Modifier.height(4.dp))
+
+            Text(
+                text = product.brand,
+                color = Color.Gray,
+                style = MaterialTheme.typography.bodySmall,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
 
             Spacer(modifier = Modifier.height(10.dp))
 
             Button(
                 onClick = onAddToCart,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(10.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.Black,
+                    contentColor = Color.White
+                )
             ) {
-                Text("Add")
+                Text("Add to Cart")
             }
         }
     }
-}
-
-/*
-   PREVIEW
- */
-
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun HomeScreenPreview() {
-    HomeScreenContent(
-        uiState = HomeUiState(
-            categories = listOf(Category(1, "Preview", android.R.drawable.ic_menu_gallery)),
-            products = listOf(Product(1, "Preview Item", "$9.99", android.R.drawable.ic_menu_gallery))
-        ),
-        onAddToCart = {}
-    )
 }

@@ -9,6 +9,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.*
+import com.example.loginsimulationapp.data.remote.dto.ProductDto
 import com.example.loginsimulationapp.ui.cart.CartScreen
 import com.example.loginsimulationapp.ui.cart.CartViewModel
 import com.example.loginsimulationapp.ui.dashboard.tabs.ProfileScreen
@@ -97,10 +98,15 @@ fun DashboardScreen(
         ) {
             composable(DashboardTab.Home.route) {
                 HomeScreen(
-                    onAddToCart = { product ->
-                        cartViewModel.addToCart(product)
+                    onAddToCart = { productDto ->
+                        cartViewModel.addToCart(productDto)
+
                         scope.launch {
-                            snackbarHostState.showSnackbar("${product.title} added to cart ✅")
+                            snackbarHostState.currentSnackbarData?.dismiss()
+
+                            snackbarHostState.showSnackbar(
+                                "${productDto.productName} added to cart 🛒"
+                            )
                         }
                     }
                 )
