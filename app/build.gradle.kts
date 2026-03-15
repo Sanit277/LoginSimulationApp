@@ -1,15 +1,11 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
     namespace = "com.example.loginsimulationapp"
-    compileSdk {
-        version = release(36)
-    }
-
+    compileSdk = 36
     defaultConfig {
         applicationId = "com.example.loginsimulationapp"
         minSdk = 24
@@ -38,10 +34,6 @@ android {
     buildFeatures {
         compose = true
     }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.3"
-    }
 }
 
 dependencies {
@@ -57,6 +49,7 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
 
     testImplementation(libs.junit)
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.0")
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
@@ -67,16 +60,6 @@ dependencies {
 
     // Image loading
     implementation("io.coil-kt:coil-compose:2.4.0")
-
-    // Retrofit + Kotlinx Serialization
-    implementation("com.squareup.retrofit2:retrofit:2.11.0")
-    implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0")
-
-    // Kotlinx Serialization JSON
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
-
-    // OkHttp logging
-    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
 
     // Lifecycle (Compose)
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7")

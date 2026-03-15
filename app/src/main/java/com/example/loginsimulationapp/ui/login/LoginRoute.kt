@@ -7,7 +7,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
 fun LoginRoute(
-    onLoginSuccess: () -> Unit,
+    onLoginSuccess: (role: String) -> Unit,
     onSignUpClick: () -> Unit
 ) {
     val viewModel: LoginViewModel = viewModel()
@@ -15,15 +15,20 @@ fun LoginRoute(
 
     LaunchedEffect(state.isLoggedIn) {
         if (state.isLoggedIn) {
-            onLoginSuccess()
+            onLoginSuccess(state.userRole ?: "CUSTOMER")
         }
     }
 
     LoginScreen(
+        selectedRole = state.selectedRole,
+        isRoleDropdownExpanded = state.isRoleDropdownExpanded,
+        roles = viewModel.roles,
         identifier = state.identifier,
         password = state.password,
         isLoading = state.isLoading,
         errorMessage = state.errorMessage,
+        onRoleSelected = viewModel::onRoleSelected,
+        onRoleDropdownExpandedChange = viewModel::onRoleDropdownExpandedChange,
         onIdentifierChange = viewModel::onIdentifierChange,
         onPasswordChange = viewModel::onPasswordChange,
         onLoginClicked = viewModel::onLoginClicked,

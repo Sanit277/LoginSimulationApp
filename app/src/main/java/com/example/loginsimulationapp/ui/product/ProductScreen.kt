@@ -56,7 +56,7 @@ fun ProductScreen(
 
             else -> {
                 LazyVerticalGrid(
-                    columns = GridCells.Fixed(3),
+                    columns = GridCells.Fixed(1),
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(horizontal = 12.dp),

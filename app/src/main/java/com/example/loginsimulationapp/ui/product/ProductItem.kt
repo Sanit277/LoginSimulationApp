@@ -40,18 +40,20 @@ fun ProductItem(product: ProductDto) {
                 .padding(10.dp),
             verticalArrangement = Arrangement.Top
         ) {
-            Spacer(
+            androidx.compose.foundation.Image(
+                painter = androidx.compose.ui.res.painterResource(id = product.imageRes),
+                contentDescription = product.productName,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(70.dp)
-                    .background(Color(0xFFF2F2F2), RoundedCornerShape(8.dp))
+                    .height(70.dp),
+                contentScale = androidx.compose.ui.layout.ContentScale.Crop
             )
 
             Spacer(modifier = Modifier.height(10.dp))
 
             Text(
                 text = product.productName,
-                style = MaterialTheme.typography.bodyMedium,
+                style = MaterialTheme.typography.bodySmall,
                 fontWeight = FontWeight.Bold,
                 color = Color.Black,
                 maxLines = 2,
@@ -64,14 +66,14 @@ fun ProductItem(product: ProductDto) {
                 text = "Rs ${product.price}",
                 style = MaterialTheme.typography.bodyMedium,
                 fontWeight = FontWeight.SemiBold,
-                color = Color.Black,
+                color = Color.DarkGray,
                 maxLines = 1
             )
 
             Spacer(modifier = Modifier.height(4.dp))
 
             Text(
-                text = product.brand,
+                text = product.storeName,
                 style = MaterialTheme.typography.bodySmall,
                 color = Color.Gray,
                 maxLines = 1,

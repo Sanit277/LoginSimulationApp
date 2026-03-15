@@ -54,6 +54,9 @@ fun AppNavGraph(
                     navController.navigate(AppRoute.Login.route) {
                         popUpTo(AppRoute.Dashboard.route) { inclusive = true }
                     }
+                },
+                onCheckoutClick = {
+                    navController.navigate(AppRoute.Checkout.route)
                 }
             )
         }

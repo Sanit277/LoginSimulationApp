@@ -1,8 +1,6 @@
 package com.example.loginsimulationapp.data.repository
 
-import com.example.loginsimulationapp.data.remote.RetrofitClient
-import com.example.loginsimulationapp.data.remote.dto.LoginRequest
-import com.example.loginsimulationapp.data.remote.dto.RegisterRequest
+import kotlinx.coroutines.delay
 
 class AuthRepository {
 
@@ -13,24 +11,12 @@ class AuthRepository {
         password: String,
         role: String = "CUSTOMER"
     ): Result<String> {
-        return try {
-            val response = RetrofitClient.authApiService.register(
-                RegisterRequest(
-                    fullName = fullName,
-                    email = email,
-                    phone = phone,
-                    password = password,
-                    role = role
-                )
-            )
-
-            if (response.success) {
-                Result.success(response.message)
-            } else {
-                Result.failure(Exception(response.message))
-            }
-        } catch (e: Exception) {
-            Result.failure(Exception("Network error: ${e.message}"))
+        delay(1000) // Simulate network delay
+        // Simulate local validation or success
+        return if (fullName.isNotBlank() && password.length >= 6) {
+            Result.success("Registration successful")
+        } else {
+            Result.failure(Exception("Registration failed: Invalid input"))
         }
     }
 
@@ -38,21 +24,12 @@ class AuthRepository {
         identifier: String,
         password: String
     ): Result<String> {
-        return try {
-            val response = RetrofitClient.authApiService.login(
-                LoginRequest(
-                    identifier = identifier,
-                    password = password
-                )
-            )
-
-            if (response.success) {
-                Result.success(response.message)
-            } else {
-                Result.failure(Exception(response.message))
-            }
-        } catch (e: Exception) {
-            Result.failure(Exception("Network error: ${e.message}"))
+        delay(1000) // Simulate network delay
+        // Simulate local success
+        return if (identifier.isNotBlank() && password.isNotBlank()) {
+            Result.success("Login successful")
+        } else {
+            Result.failure(Exception("Login failed: Invalid credentials"))
         }
     }
 }

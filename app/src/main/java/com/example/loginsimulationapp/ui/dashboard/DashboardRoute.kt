@@ -8,6 +8,7 @@ import androidx.compose.runtime.collectAsState
 @Composable
 fun DashboardRoute(
     onLogout: () -> Unit,
+    onCheckoutClick: () -> Unit,
     viewModel: DashboardViewModel = viewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -15,6 +16,7 @@ fun DashboardRoute(
     DashboardScreen(
         uiState = uiState,
         onLogout = onLogout,
-        onTabRouteChanged = viewModel::onTabChanged
+        onTabRouteChanged = viewModel::onTabChanged,
+        onCheckoutClick = onCheckoutClick
     )
 }

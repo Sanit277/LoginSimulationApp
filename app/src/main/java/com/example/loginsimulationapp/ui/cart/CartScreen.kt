@@ -13,8 +13,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
+import androidx.compose.ui.unit.dp
 
 @Composable
 private fun CartItemRow(
@@ -33,15 +34,15 @@ private fun CartItemRow(
                 .padding(12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // ✅ Use AsyncImage for ProductDto imageUrl
+            // ✅ Use Image for ProductDto imageRes
             Box(
                 modifier = Modifier
                     .size(64.dp)
                     .background(Color(0xFFF2F2F2), RoundedCornerShape(8.dp)),
                 contentAlignment = Alignment.Center
             ) {
-                AsyncImage(
-                    model = item.product.imageUrl,
+                androidx.compose.foundation.Image(
+                    painter = androidx.compose.ui.res.painterResource(id = item.product.imageRes),
                     contentDescription = item.product.productName,
                     modifier = Modifier.fillMaxSize(),
                     contentScale = ContentScale.Crop
@@ -153,4 +154,17 @@ fun CartScreen(
             Text("Checkout (${uiState.totalItems} items)", modifier = Modifier.padding(8.dp))
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun CartScreenPreview(){
+    CartScreen(
+        uiState = CartUiState(),
+        onPlus = {},
+        onMinus = {},
+        onDelete = {},
+        onClear = {},
+        onCheckout = {}
+    )
 }

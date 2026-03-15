@@ -42,7 +42,7 @@ fun SplashScreen(
     )
 
     LaunchedEffect(Unit) {
-        delay(5000)
+        delay(3000)
         onFinished()
     }
 

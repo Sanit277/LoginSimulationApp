@@ -1,8 +1,7 @@
 package com.example.loginsimulationapp.data.remote.dto
 
-import kotlinx.serialization.Serializable
+import androidx.annotation.DrawableRes
 
-@Serializable
 data class ProductDto(
     val id: Long,
     val storeId: Long,
@@ -14,6 +13,6 @@ data class ProductDto(
     val price: Double,
     val stockQuantity: Int,
     val brand: String,
-    val imageUrl: String,
+    @DrawableRes val imageRes: Int,
     val status: String
 )
