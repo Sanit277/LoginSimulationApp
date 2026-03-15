@@ -1,0 +1,37 @@
+ M app/build.gradle.kts
+ D app/src/main/java/com/example/loginsimulationapp/data/remote/RetrofitClient.kt
+ D app/src/main/java/com/example/loginsimulationapp/data/remote/api/AuthApiService.kt
+ D app/src/main/java/com/example/loginsimulationapp/data/remote/api/ProductApiService.kt
+ D app/src/main/java/com/example/loginsimulationapp/data/remote/dto/ApiResponse.kt
+ D app/src/main/java/com/example/loginsimulationapp/data/remote/dto/LoginRequest.kt
+ M app/src/main/java/com/example/loginsimulationapp/data/remote/dto/ProductDto.kt
+ D app/src/main/java/com/example/loginsimulationapp/data/remote/dto/RegisterRequest.kt
+ M app/src/main/java/com/example/loginsimulationapp/data/repository/AuthRepository.kt
+ M app/src/main/java/com/example/loginsimulationapp/data/repository/ProductRepository.kt
+ M app/src/main/java/com/example/loginsimulationapp/ui/LoginSimulationApp.kt
+ M app/src/main/java/com/example/loginsimulationapp/ui/cart/CartScreen.kt
+A  app/src/main/java/com/example/loginsimulationapp/ui/checkout/CheckoutScreen.kt
+ M app/src/main/java/com/example/loginsimulationapp/ui/dashboard/DashboardRoute.kt
+ M app/src/main/java/com/example/loginsimulationapp/ui/dashboard/DashboardScreen.kt
+ M app/src/main/java/com/example/loginsimulationapp/ui/dashboard/tabs/ProfileScreen.kt
+ M app/src/main/java/com/example/loginsimulationapp/ui/home/HomeScreen.kt
+ M app/src/main/java/com/example/loginsimulationapp/ui/login/LoginState.kt
+ M app/src/main/java/com/example/loginsimulationapp/ui/login/LoginViewModel.kt
+ M app/src/main/java/com/example/loginsimulationapp/ui/navigation/AppNavGraph.kt
+ M app/src/main/java/com/example/loginsimulationapp/ui/navigation/AppNavigation.kt
+ M app/src/main/java/com/example/loginsimulationapp/ui/navigation/AppRoute.kt
+ M app/src/main/java/com/example/loginsimulationapp/ui/product/ProductDetailScreen.kt
+ M app/src/main/java/com/example/loginsimulationapp/ui/product/ProductItem.kt
+ M app/src/main/java/com/example/loginsimulationapp/ui/product/ProductScreen.kt
+ M app/src/main/java/com/example/loginsimulationapp/ui/signup/SignUpRoute.kt
+ M app/src/main/java/com/example/loginsimulationapp/ui/splash/SplashScreen.kt
+ M app/src/main/java/com/example/loginsimulationapp/ui/theme/Color.kt
+ M app/src/main/java/com/example/loginsimulationapp/ui/theme/Theme.kt
+?? .idea/deviceManager.xml
+?? .vscode/
+?? app/src/main/java/com/example/loginsimulationapp/ui/dashboard/tabs/ProfileUiState.kt
+?? app/src/main/java/com/example/loginsimulationapp/ui/dashboard/tabs/ProfileViewModel.kt
+?? app/src/main/res/drawable/product_laptop.png
+?? app/src/main/res/drawable/product_shoe.png
+?? app/src/main/res/drawable/product_watch.png
+?? status.txt
